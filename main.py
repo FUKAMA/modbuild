@@ -11,3 +11,8 @@ import inspect
 
 # コマンドのパッケージをインポート
 import commands
+
+
+# if __name__ == "__main__":
+
+
