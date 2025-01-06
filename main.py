@@ -7,29 +7,30 @@
 import argparse
 
 # コマンドのパッケージをインポート
-from commands import load_commands
+from commands import LoadSubcommands
 
 def main():
     # コマンドライン引数を収集
-    parser = argparse.ArgumentParser(description="コマンドライン引数を収集")
+    parser = argparse.ArgumentParser(description="サブコマンドを指定")
     subparsers = parser.add_subparsers(dest="command", help="サブコマンド")
 
-    # commands ディレクトリ内のサブコマンドをロード
-    commands = load_commands()
+    # commandsディレクトリ内のサブコマンドを収集
+    commands = LoadSubcommands()
+    # 収集したサブコマンドを全て走査
     for name, module in commands.items():
-        print(f"Loading subcommand: {name}")
-        module.add_subcommand(subparsers)
+        # サブコマンドを初期化
+        module.Register(subparsers)
 
     # 引数を解析
     args = parser.parse_args()
 
     # サブコマンドを実行
     if args.command and args.command in commands:
-        commands[args.command].execute(args)
+        commands[args.command].Execute(args)
     else:
         parser.print_help()
 
-
+# エントリポイント
 if __name__ == '__main__':
     main()
 
