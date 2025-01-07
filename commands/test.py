@@ -13,8 +13,13 @@ def Execute(args):
     # モジュールをビルド
     subprocess.run(["cmake","--build","."])
     
-    os.chdir("build")
+    # os.chdir("build")
+    os.chdir("build/bin/Debug")
 
-    subprocess.run(["ctest","--output-on-failure"])
+    # subparsers.run("test.exe")
+
+    os.system("test.exe")
+
+    # subprocess.run(["ctest","--output-on-failure"])
     
     # print(f"Building project: {args.name}, type: {args.type}")
