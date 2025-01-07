@@ -3,6 +3,8 @@ import importlib
 import subprocess
 import os
 from tkinter import Tk, filedialog
+import requests
+import zipfile
 
 def LoadSubcommands():
     """
