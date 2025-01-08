@@ -19,16 +19,6 @@ def Register(subparsers):
 def Execute(args):
     print(f"Building project: {args.name}, type: {args.type}")
 
-    # モジュールのテンプレートリポジトリをクローンしてくる
-    # subprocess.run(["git","clone","https://github.com/FUKAMA/TempModule.git",f"{args.name}"])
-
-    # プロジェクトを作成
-    
-    # shutil.rmtree(".git/")
-    # subprocess.run(["rmdir",".git"])
-    # subprocess.run(["cmake",f"-DPROJ_NAME={args.name}",f"-DPROJ_TYPE={args.type}"])
-
-    # if args.createRepo != "no"
     # GitHubのリポジトリを作成
     subprocess.run(["gh","repo","create",f"{args.name}",f"--public"])
     # GitHubのユーザー名を取得
@@ -44,8 +34,6 @@ def Execute(args):
     subprocess.run(["git","clone",f"https://github.com/{username}/{args.name}.git"])
     # クローンしたディレクトリに移動
     os.chdir(f"{args.name}")
-
-
 
 
     # モジュールテンプレートをダウンロード
@@ -69,36 +57,8 @@ def Execute(args):
     # 展開に使ったディレクトリとZIPファイルを削除
     shutil.rmtree("TempModule-main")
     os.remove(template_zip)
-
-
+    
     subprocess.run(["cmake",f"-DPROJ_NAME={args.name}",f"-DPROJ_TYPE={args.type}"])
-
-
-
-    # # モジュールテンプレートをダウンロード
-    # template_url = "https://github.com/FUKAMA/TempModule/archive/refs/heads/main.zip"
-    # template_zip = "TempMod.zip"
-    # subprocess.run(["wget", template_url, "-O", template_zip], check=True,shell=True)
-
-    # # ダウンロードしたZIPを解凍
-    # with zipfile.ZipFile(template_zip, 'r') as zip_ref:
-    #     zip_ref.extractall("TempModule-main")
-
-    # # 解凍したテンプレートの中身を移動
-    # temp_dir = "TempModule-main/TempModule-main"
-    # for item in os.listdir(temp_dir):
-    #     shutil.move(os.path.join(temp_dir, item), ".")
-
-    # # 展開に使ったディレクトリとZIPファイルを削除
-    # shutil.rmtree("TempModule-main")
-    # os.remove(template_zip)
-
-
-
-
-
-
-
 
 
     # 初期コミットとプッシュ
@@ -106,35 +66,3 @@ def Execute(args):
     subprocess.run(["git", "commit", "-m", "Initial commit"], check=True)
     subprocess.run(["git", "branch", "-M", "main"], check=True)
     subprocess.run(["git", "push", "-u", "origin", "main"], check=True)
-
-
-
-
-
-
-    # # モジュールのテンプレートをダウンロード
-    # subprocess.run(
-    #     ["wget","https://github.com/FUKAMA/TempModule/archive/refs/heads/main.zip","OutFile","TempMod.zip"]
-    #     shell=True
-    # )        
-    # # ダウンロードしたファイルを解凍
-    # subprocess.run(["tar","-xf","TempMod.zip"])
-    # # 解凍したファイルを移動
-    # subprocess.run(
-    #     ["Get-ChildItem","-Path","./TempMpdule-main","-Recurse","|","Move-Item","-Destination","."]
-    #     shell=True
-    # )
-
-    # # 展開に使ったディレクトリをファイルを削除
-    # subprocess.run(["rmdir","TempModule-main"])
-    # subprocess.run(["del","TempMod.zip"])
-
-
-    # Gitのリポジトリを作成
-    # subprocess.run(["git","init"])
-
-    #     # 初期コミットとプッシュ
-    # subprocess.run(["git", "add", "."])
-    # subprocess.run(["git", "commit", "-m", "Initial commit"])
-    # subprocess.run(["git", "branch", "-M", "main"])
-    # subprocess.run(["git", "push", "-u", "origin", "main"])
