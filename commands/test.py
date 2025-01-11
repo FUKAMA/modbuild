@@ -12,15 +12,12 @@ def Register(subparsers):
 def Execute(args):
 
     # モジュールをビルド
+    print("モジュールのビルド")
     subprocess.run(["cmake","--build","."])
-    
-    # os.chdir("build")
+
+    # ビルド結果が格納されているディレクトリに移動
     os.chdir("build/bin/Debug")
 
-    # subparsers.run("test.exe")
-
+    # テストを実行
     os.system(f"test.exe --gtest_filter={args.case}.{args.name}")
 
-    # subprocess.run(["ctest","--output-on-failure"])
-    
-    # print(f"Building project: {args.name}, type: {args.type}")
