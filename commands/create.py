@@ -2,22 +2,21 @@
 # 新規モジュールの開発環境を構築するサブコマンド
 #==================================================
 
-
 import subprocess
 import os
 import shutil
 import requests
 import zipfile
-
+import json
 
 def Register(subparsers):
     parser = subparsers.add_parser("create", help="モジュールの開発環境を作成する")
     parser.add_argument("--name", required=True, help="プロジェクトの名前")
     parser.add_argument("--type", choices=["STATIC", "SHARED"], default="STATIC", help="プロジェクトの種類")
-    # parser.add_argument("--repo", choises=["private","public"],default="public",help="リポジトリを作成するか")
 
 def Execute(args):
-    print(f"Building project: {args.name}, type: {args.type}")
+
+
 
     # GitHubのリポジトリを作成
     subprocess.run(["gh","repo","create",f"{args.name}",f"--public"])
@@ -57,7 +56,22 @@ def Execute(args):
     # 展開に使ったディレクトリとZIPファイルを削除
     shutil.rmtree("TempModule-main")
     os.remove(template_zip)
-    
+
+    # プロジェクト名などをJsonに保存
+    #-------------------------------------
+
+    # JSONファイルのパス
+    proj_data_path = "projData.json"
+
+    # 書き込むデータを作成
+    projData = {
+        "ProjName": args.name,
+        "ProjType": args.type
+    }
+
+    # JSONファイルに書き込む
+    with open(proj_data_path, "w", encoding="utf-8") as projDataFile:
+        json.dump(projData, projDataFile, indent=4, ensure_ascii=False)    # プロジェクトを初期化
     subprocess.run(["cmake",f"-DPROJ_NAME={args.name}",f"-DPROJ_TYPE={args.type}"])
 
 
