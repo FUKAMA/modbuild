@@ -5,6 +5,7 @@ import os
 from tkinter import Tk, filedialog
 import requests
 import zipfile
+import json
 
 def LoadSubcommands():
     """
