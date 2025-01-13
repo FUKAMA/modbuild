@@ -5,6 +5,7 @@
 
 # コマンドライン引数を処理するための機能をインポート
 import argparse
+import importlib
 
 # コマンドのパッケージをインポート
 from commands import LoadSubcommands
@@ -15,18 +16,22 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="サブコマンド")
 
     # commandsディレクトリ内のサブコマンドを収集
-    commands = LoadSubcommands()
-    # 収集したサブコマンドを全て走査
-    for name, module in commands.items():
-        # サブコマンドを初期化
-        module.Register(subparsers)
+    commands = {}
+    LoadSubcommands(commands, subparsers)
+    # # 収集したサブコマンドを全て走査
+    # for name, module in commands.items():
+    #     # サブコマンドを初期化
+    #     module.Register(subparsers)
 
     # 引数を解析
     args = parser.parse_args()
 
     # サブコマンドを実行
     if args.command and args.command in commands:
-        commands[args.command].Execute(args)
+        module = importlib.import_module(commands[args.command])
+        module.Register(subparsers)
+        module.Execute(args)
+
     else:
         parser.print_help()
 
