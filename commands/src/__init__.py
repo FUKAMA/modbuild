@@ -1,16 +1,13 @@
 import argparse
 import importlib
 import pkgutil
-import tkinter
 import os
 import runpy
-import requests
 import os
+import sys
 import subprocess
 from tkinter import filedialog
 from tkinter import Tk, filedialog
-import json
-
 
 # このパッケージの説明
 

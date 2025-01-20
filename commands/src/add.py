@@ -1,23 +1,40 @@
-#==================================================
-# サブコマンドを作成する際にベースとなる形式が記述されているファイル
-#==================================================
-
-import subprocess
-import fnmatch
 import os
+import sys
+import subprocess
 from tkinter import filedialog
 from tkinter import Tk, filedialog
 
+# 説明や引き数などを登録する
 def Register(subparsers):
-    parser = subparsers.add_parser("addsource", help="プロジェクトにソースファイルを追加する")
+    #=====================================
+    # 引き数定義ゾーン開始
+    #--------------
+    # ↓ここにこのコマンドの説明を書く
+    helpString = "テンプレートコマンド"
+    #--------------
+    # 引き数定義ゾーン終了
+    #=====================================
+
+    
+    # コマンド名をファイル名から取得
+    commName =os.path.splitext(os.path.basename(os.path.abspath(__file__)))[0] 
+    parser = subparsers.add_parser(f"{commName}", help=f"cmm: {helpString}")
+    
+    
+    #=====================================
+    # 引き数定義ゾーン開始
+    #--------------
+    # parser.add_argument("--変数名", help="変数の説明")
+    #--------------
     parser.add_argument("--name", help="追加するファイルの名前")
-    # parser.add_argument("--ext",choices=["h","cpp","hpp","hcpp"],default="hcpp",help="ファイルの拡張子")
     parser.add_argument("--dir",default="",help="ソースを配置するディレクトリ")
-    # parser.add_argument("-h", action="store_true", help="ヘッダファイルを生成")
     parser.add_argument("-hpp", action="store_true", help="ヘッダファイルを生成")
     parser.add_argument("-cpp", action="store_true", help="ヘッダファイルを生成")
+    #--------------
+    # 引き数定義ゾーン終了
+    #=====================================
 
-
+# コマンドを実行したときの処理
 def Execute(args):
 
     # ディレクトリが指定されてなければエクスプローラーを開いて指定
@@ -56,10 +73,3 @@ def Execute(args):
     files = os.listdir(os.getcwd()+"/main/include")
     projName = [i for i in files if i.endswith(".hpp") == True]
     subprocess.run(["cmake",f"-DPROJ_NAME={os.path.splitext(projName[0])[0]}","-DPROJ_TYPE=STATIC"])
-
-    # update.Execute(args)
-    # subprocess.run(["cmake",f"-DPROJ_NAME={args.name}",f"-DPROJ_TYPE=STATIC"])
-
-
-
-    # print(f"Building project: {args.name}, type: {args.type}")

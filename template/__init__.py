@@ -4,13 +4,6 @@ import pkgutil
 import tkinter
 import os
 import runpy
-import requests
-import os
-import subprocess
-from tkinter import filedialog
-from tkinter import Tk, filedialog
-import json
-
 
 # このパッケージの説明
 
@@ -27,6 +20,7 @@ def LoadSubPackages(parser):
         modName = f"{__name__}.{name}"
         # モジュールをインポート
         module = importlib.import_module(modName)
+        runpy.run_module(modName, run_name="__main__", alter_sys=True)
 
 
         if hasattr(module, "Register"):

@@ -1,20 +1,37 @@
-#==================================================
-# サブコマンドを作成する際にベースとなる形式が記述されているファイル
-#==================================================
-
-import subprocess
-import fnmatch
 import os
-from tkinter import filedialog
+import subprocess
 from tkinter import Tk, filedialog
-import pathlib
 from pathlib import Path
+import sys
 
+# 説明や引き数などを登録する
 def Register(subparsers):
-    parser = subparsers.add_parser("addtest", help="テストを作成する")
-    # parser.add_argument("--name", help="追加するファイルの名前")
+    #=====================================
+    # 引き数定義ゾーン開始
+    #--------------
+    # ↓ここにこのコマンドの説明を書く
+    helpString = "特定のファイルのテストを追加する"
+    #--------------
+    # 引き数定義ゾーン終了
+    #=====================================
 
+    
+    # コマンド名をファイル名から取得
+    commName =os.path.splitext(os.path.basename(os.path.abspath(__file__)))[0] 
+    parser = subparsers.add_parser(f"{commName}", help=f"cmm: {helpString}")
+    
+    
+    #=====================================
+    # 引き数定義ゾーン開始
+    #--------------
+    # parser.add_argument("--変数名", help="変数の説明")
+    #--------------
+    parser.add_argument("--hoge",default="aaa", help="HOGEるかどうか")
+    #--------------
+    # 引き数定義ゾーン終了
+    #=====================================
 
+# コマンドを実行したときの処理
 def Execute(args):
 
     # ディレクトリが指定されてなければエクスプローラーを開いて指定
@@ -27,9 +44,12 @@ def Execute(args):
         filetypes=[
             ("ヘッダファイル", "*.hpp")
             ])
-    print(fileDir)
 
-    fileObj=Path(fileDir).resolve()
+    if not fileDir:
+        print("有効なファイルを指定してください")
+        sys.exit(1)
+
+    fileObj = Path(fileDir).resolve()
 
     # テストを作成するソースファイルの名前
     sourceName =os.path.splitext(os.path.basename(fileDir))[0]
@@ -37,18 +57,15 @@ def Execute(args):
     # mainのsrcまで移動
     os.chdir("main/src")
     # srcからの相対パスを求める
-    mainRelPath =fileObj.relative_to(os.getcwd())
-    print(mainRelPath)
+    mainRelPath = fileObj.relative_to(os.getcwd())
 
     # testのsrcまで移動
     os.chdir(cDir)
     os.chdir("test/src")
     # 相対パスを使いtestのsrcからの絶対パスを作成
-    testPath = os.getcwd() + f"\{mainRelPath}"
+    testPath = os.getcwd() + f"/{mainRelPath}"
 
-    print(testPath)
-    testDir=os.path.dirname(testPath)
-    print(testDir)
+    testDir = os.path.dirname(testPath)
 
     os.mkdir(testDir)
 
@@ -69,19 +86,6 @@ TEST({sourceName}, AAA)\n\
     with open(f"{sourceName}.cpp",mode="w") as file:
         file.write(testSource)
 
-    # ファイルに書き込む文字列を作成
-    # hFileString=f"#pragma once\n// {args.name}"
-    # cppFileString=""
-
-    # if args.hpp:
-    # if args.cpp:
-    #     # ファイルを作成
-    #     with open(f"{args.name}.cpp",mode="w") as file:
-    #         if args.hpp:
-    #         # if args.h or args.hpp:
-    #             cppFileString=f"#include \"{args.name}.hpp\""
-    #         file.write(cppFileString)
-
     # ディレクトリを戻す
     os.chdir(cDir)
 
@@ -89,10 +93,3 @@ TEST({sourceName}, AAA)\n\
     files = os.listdir(os.getcwd()+"/main/include")
     projName = [i for i in files if i.endswith(".hpp") == True]
     subprocess.run(["cmake",f"-DPROJ_NAME={os.path.splitext(projName[0])[0]}","-DPROJ_TYPE=STATIC"])
-
-    # update.Execute(args)
-    # subprocess.run(["cmake",f"-DPROJ_NAME={args.name}",f"-DPROJ_TYPE=STATIC"])
-
-
-
-    # print(f"Building project: {args.name}, type: {args.type}")

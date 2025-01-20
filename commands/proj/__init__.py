@@ -4,12 +4,9 @@ import pkgutil
 import tkinter
 import os
 import runpy
-import requests
-import os
+import sys
 import subprocess
-from tkinter import filedialog
-from tkinter import Tk, filedialog
-import json
+import sys
 
 
 # このパッケージの説明
