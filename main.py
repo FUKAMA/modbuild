@@ -7,21 +7,11 @@
 import argparse
 import importlib
 import importlib.util
-import tkinter
 import sys
 
-from modules import utl
-from modules import log
-
-# コマンドのパッケージをインポート
-# from commands import addsource
+from modules.util import log
 
 from commands import LoadSubPackages
-
-
-def Error(message):
-    log.Error(message)
-    sys.exit(1)
 
 def main():
 
@@ -36,27 +26,28 @@ def main():
     LoadSubPackages(subParser)
     
     
+    
     # コマンドが指定されてなければ終了
     if len(sys.argv) < 2:
-        Error("コマンドが指定されていません。")
+        log.Error("コマンドが指定されていません。",True)
 
     # コマンドライン引数を解析してcmmandとargsに分割
     clArgs = clArgParsers.parse_args()
 
     # 
     if not clArgs:
-        Error("コマンドが指定されていません。")
+        log.Error("コマンドが指定されていません。",True)
 
     # 
     if not clArgs.command:
-        Error("コマンドが指定されていません。")
+        log.Error("コマンドが指定されていません。",True)
     
     # 実行するコマンドの名前(パス)を作成
     modName = "commands." + ".".join(clArgs.command)
 
     # コマンドが存在しなければ終了
     if importlib.util.find_spec(modName) is None:
-        Error("存在しないコマンドです")
+        log.Error("存在しないコマンドです",True)
 
 
     # コマンドライン引数を解析して指定したコマンドの引数を取得
@@ -70,11 +61,10 @@ def main():
 
     # 指定したモジュールがパッケージのInitなら
     else:
-        Error("パッケージは実行できません コマンドを指定してください")
+        log.Error("パッケージは実行できません コマンドを指定してください",True)
 
 
 
 # エントリポイント
 if __name__ == '__main__':
-    utl.aaa()
     main()

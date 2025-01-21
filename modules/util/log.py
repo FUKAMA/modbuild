@@ -1,6 +1,7 @@
 
 # 色の定義
 #--------------------------------
+import sys
 
 RED = "\033[91m"
 GREEN = "\033[92m"
@@ -9,8 +10,10 @@ SKY = "\033[96m"
 RESET = "\033[0m"
 
 # 赤文字でエラーメッセージを出力する
-def Error(message):
-    print(f"{RED}{message}{RESET}")    
+def Error(message,isExit = False):
+    print(f"{RED}{message}{RESET}")  
+    if isExit:
+        sys.exit(1)
 
 # 黄文字で警告メッセージを出力する
 def Warn(message):

@@ -72,6 +72,8 @@ def Execute(args):
     # ディレクトリを移動
     os.chdir(testDir)
 
+    testFileName = sourceName + "_" + args.name
+
     # テストファイルに書き込む文字列を作成
 
     testSource = f"#include <gtest/gtest.h>\n\
@@ -83,7 +85,7 @@ TEST({sourceName}, {args.name})\n\
 "
 
     # ファイルを作成
-    with open(f"{sourceName}.cpp",mode="w") as file:
+    with open(f"{testFileName}.cpp",mode="w") as file:
         file.write(testSource)
 
     # ディレクトリを戻す
