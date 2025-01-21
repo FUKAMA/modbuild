@@ -4,9 +4,11 @@ import pkgutil
 import tkinter
 import os
 import runpy
-import sys
+import requests
+import os
 import subprocess
-import sys
+from tkinter import filedialog
+from tkinter import Tk, filedialog
 import json
 
 
@@ -16,7 +18,7 @@ import json
 
 def LoadSubPackages(parser):
 
-    packHelp = "パッケージの説明"
+    packHelp = "各種プロジェクトを作成するコマンドが格納されたパッケージ"
 
     # 今いるディレクトリの中にあるアイテムを全て走査
     for loader, name, isPkg in pkgutil.iter_modules(__path__):
@@ -25,7 +27,6 @@ def LoadSubPackages(parser):
         modName = f"{__name__}.{name}"
         # モジュールをインポート
         module = importlib.import_module(modName)
-
 
 
         if hasattr(module, "Register"):

@@ -2,6 +2,8 @@ import subprocess
 import os
 import sys
 
+
+
 # 説明や引き数などを登録する
 def Register(subparsers):
     #=====================================
@@ -12,7 +14,6 @@ def Register(subparsers):
     #--------------
     # 引き数定義ゾーン終了
     #=====================================
-
     
     # コマンド名をファイル名から取得
     commName =os.path.splitext(os.path.basename(os.path.abspath(__file__)))[0] 

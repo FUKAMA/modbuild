@@ -26,7 +26,7 @@ def Register(subparsers):
     #--------------
     # parser.add_argument("--変数名", help="変数の説明")
     #--------------
-    parser.add_argument("--hoge",default="aaa", help="HOGEるかどうか")
+    parser.add_argument("--name", help="テスト名")
     #--------------
     # 引き数定義ゾーン終了
     #=====================================
@@ -76,7 +76,7 @@ def Execute(args):
 
     testSource = f"#include <gtest/gtest.h>\n\
 #include \"{mainRelPath}\"\n\
-TEST({sourceName}, AAA)\n\
+TEST({sourceName}, {args.name})\n\
 {{\n\
     EXPECT_TRUE(true);    // 成功\n\
 }}\n\

@@ -10,20 +10,17 @@ import importlib.util
 import tkinter
 import sys
 
+from modules import utl
+from modules import log
 
 # コマンドのパッケージをインポート
 # from commands import addsource
 
 from commands import LoadSubPackages
 
-RED = "\033[91m"
-GREEN = "\033[92m"
-YELLOW = "\033[93m"
-SKY = "\033[96m"
-RESET = "\033[0m"
 
 def Error(message):
-    print(f"{RED}{message}{RESET}", file=sys.stderr)
+    log.Error(message)
     sys.exit(1)
 
 def main():
@@ -79,4 +76,5 @@ def main():
 
 # エントリポイント
 if __name__ == '__main__':
+    utl.aaa()
     main()

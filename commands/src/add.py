@@ -4,6 +4,9 @@ import subprocess
 from tkinter import filedialog
 from tkinter import Tk, filedialog
 
+from modules import utl
+
+
 # 説明や引き数などを登録する
 def Register(subparsers):
     #=====================================
@@ -36,6 +39,8 @@ def Register(subparsers):
 
 # コマンドを実行したときの処理
 def Execute(args):
+
+    utl.aaa()
 
     # ディレクトリが指定されてなければエクスプローラーを開いて指定
     print(args.name)

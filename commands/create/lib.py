@@ -1,7 +1,3 @@
-#==================================================
-# 新規モジュールの開発環境を構築するサブコマンド
-#==================================================
-
 import subprocess
 import os
 import shutil
@@ -9,17 +5,43 @@ import requests
 import zipfile
 import json
 
-def Register(subparsers):
-    parser = subparsers.add_parser("create", help="モジュールの開発環境を作成する")
-    parser.add_argument("--name", required=True, help="プロジェクトの名前")
-    parser.add_argument("--type", choices=["STATIC", "SHARED"], default="STATIC", help="プロジェクトの種類")
 
+
+# 説明や引き数などを登録する
+def Register(subparsers):
+    #=====================================
+    # 引き数定義ゾーン開始
+    #--------------
+    # ↓ここにこのコマンドの説明を書く
+    helpString = "静的ライブラリプロジェクトを作成"
+    #--------------
+    # 引き数定義ゾーン終了
+    #=====================================
+
+    
+    # コマンド名をファイル名から取得
+    commName =os.path.splitext(os.path.basename(os.path.abspath(__file__)))[0] 
+    parser = subparsers.add_parser(f"{commName}", help=f"cmm: {helpString}")
+    
+    
+    #=====================================
+    # 引き数定義ゾーン開始
+    #--------------
+    # parser.add_argument("--変数名", help="変数の説明")
+    #--------------
+    parser.add_argument("--name", required=True, help="ライブラリの名前")
+    parser.add_argument("--type", choices=["STATIC", "SHARED"], default="STATIC", help="動的ライブラリか、静的ライブラリか")
+    #--------------
+    # 引き数定義ゾーン終了
+    #=====================================
+
+# コマンドを実行したときの処理
 def Execute(args):
 
 
 
     # GitHubのリポジトリを作成
-    subprocess.run(["gh","repo","create",f"{args.name}",f"--public"])
+    subprocess.run(["gh","repo","create",f"{args.name}",f"--private"])
     # GitHubのユーザー名を取得
     result = subprocess.run(
         ["gh", "api", "user", "--jq", ".login"],
@@ -66,7 +88,8 @@ def Execute(args):
     # 書き込むデータを作成
     projData = {
         "ProjName": args.name,
-        "ProjType": args.type
+        "ProjType": args.type,
+        "libraries" : {}
     }
 
     # JSONファイルに書き込む
