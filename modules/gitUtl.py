@@ -19,9 +19,9 @@ def IsAlreadyCreatedRepo(name):
 
         result = True
 
-    # 来なかったら存在しない
     except subprocess.CalledProcessError as e:
 
+        # エラーメッセージの内容が「リポジトリが存在しない」だった場合のみ結果にFalseを返す
         if "Could not resolve to a Repository" in e.stderr:
             result = False
         else:

@@ -51,7 +51,7 @@ def Execute(args):
     if isCreatedResult == True:
         log.Error("すでに同じ名前のリポジトリが存在します")
         return False
-    else:
+    elif not isCreatedResult == False:
         log.Error(f"{isCreatedResult}")
         return False
 
