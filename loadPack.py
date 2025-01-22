@@ -4,27 +4,26 @@ import pkgutil
 import tkinter
 import os
 import runpy
+import requests
+import os
+import subprocess
+from tkinter import filedialog
+from tkinter import Tk, filedialog
+import json
+
 
 # このパッケージの説明
 
 
 
-def LoadSubPackages(parser):
-
-    packHelp = "パッケージの説明"
-
+def Load(parser,dirPath,dirName,packHelp):
     # 今いるディレクトリの中にあるアイテムを全て走査
-    for loader, name, isPkg in pkgutil.iter_modules(__path__):
+    for loader, name, isPkg in pkgutil.iter_modules(dirPath):
 
         # 今のディレクトリの名前を取得
-        modName = f"{__name__}.{name}"
+        modName = f"{dirName}.{name}"
         # モジュールをインポート
-        print("uiu")
         module = importlib.import_module(modName)
-        print("uiu")
-        runpy.run_module(modName, run_name="__main__", alter_sys=True)
-        print("uiui")
-
 
         if hasattr(module, "Register"):
             module.Register(parser)

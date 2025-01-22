@@ -11,6 +11,7 @@ from tkinter import filedialog
 from tkinter import Tk, filedialog
 import json
 
+import loadPack
 
 # このパッケージの説明
 
@@ -20,22 +21,34 @@ def LoadSubPackages(parser):
 
     packHelp = "パッケージの説明"
 
-    # 今いるディレクトリの中にあるアイテムを全て走査
-    for loader, name, isPkg in pkgutil.iter_modules(__path__):
-
-        # 今のディレクトリの名前を取得
-        modName = f"{__name__}.{name}"
-        # モジュールをインポート
-        module = importlib.import_module(modName)
+    loadPack.Load(parser,__path__,__name__,packHelp)
 
 
-        if hasattr(module, "Register"):
-            module.Register(parser)
 
-        if hasattr(module, "LoadSubPackages"):
+# # このパッケージの説明
 
-            # 
-            packParser = parser.add_parser(f"{name}",help = f"pck: {packHelp}")
-            subParser = packParser.add_subparsers()
-            module.LoadSubPackages(subParser)
+
+
+# def LoadSubPackages(parser):
+
+#     packHelp = "パッケージの説明"
+
+#     # 今いるディレクトリの中にあるアイテムを全て走査
+#     for loader, name, isPkg in pkgutil.iter_modules(__path__):
+
+#         # 今のディレクトリの名前を取得
+#         modName = f"{__name__}.{name}"
+#         # モジュールをインポート
+#         module = importlib.import_module(modName)
+
+
+#         if hasattr(module, "Register"):
+#             module.Register(parser)
+
+#         if hasattr(module, "LoadSubPackages"):
+
+#             # 
+#             packParser = parser.add_parser(f"{name}",help = f"pck: {packHelp}")
+#             subParser = packParser.add_subparsers()
+#             module.LoadSubPackages(subParser)
 

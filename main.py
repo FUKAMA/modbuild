@@ -9,7 +9,7 @@ import importlib
 import importlib.util
 import sys
 
-from modules.util import log
+from modules.utl import log
 
 from commands import LoadSubPackages
 

@@ -11,13 +11,18 @@ RESET = "\033[0m"
 
 # 赤文字でエラーメッセージを出力する
 def Error(message,isExit = False):
-    print(f"{RED}{message}{RESET}")  
+    print(f"{RED}Error: {message}{RESET}")  
     if isExit:
         sys.exit(1)
 
 # 黄文字で警告メッセージを出力する
 def Warn(message):
-    print(f"{YELLOW}{message}{RESET}")
+    print(f"{YELLOW}Warning: {message}{RESET}")
+
+# システムメッセージを出力
+def SysMessage(message):
+    print(f"{SKY}{message}{RESET}")
+
 
 # 以降に出力される文字を引数のものに変化させる
 def ChangeColor(color):

@@ -2,7 +2,7 @@ import subprocess
 import os
 import sys
 
-
+from modules import proj
 
 # 説明や引き数などを登録する
 def Register(subparsers):
@@ -32,10 +32,11 @@ def Register(subparsers):
 
 # コマンドを実行したときの処理
 def Execute(args):
-    nowDir=os.path.basename(os.getcwd())
-    print(nowDir)
+    proj.UpdateProject()
+    # nowDir=os.path.basename(os.getcwd())
+    # print(nowDir)
 
-    # mainディレクトリの中のインクルードファイルからプロジェクト名を取得
-    files = os.listdir(os.getcwd()+"/main/include")
-    projName = [i for i in files if i.endswith(".hpp") == True]
-    subprocess.run(["cmake",f"-DPROJ_NAME={os.path.splitext(projName[0])[0]}","-DPROJ_TYPE=STATIC"])
+    # # mainディレクトリの中のインクルードファイルからプロジェクト名を取得
+    # files = os.listdir(os.getcwd()+"/main/include")
+    # projName = [i for i in files if i.endswith(".hpp") == True]
+    # subprocess.run(["cmake",f"-DPROJ_NAME={os.path.splitext(projName[0])[0]}","-DPROJ_TYPE=STATIC"])

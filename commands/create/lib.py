@@ -1,11 +1,12 @@
 import subprocess
 import os
 import shutil
-import requests
 import zipfile
 import json
 
-from modules.proj import createLib
+from modules import proj
+from modules import gitUtl
+from modules.utl import log
 
 # 説明や引き数などを登録する
 def Register(subparsers):
@@ -30,8 +31,8 @@ def Register(subparsers):
     # parser.add_argument("--変数名", help="変数の説明")
     #--------------
     parser.add_argument("--name", required=True, help="ライブラリの名前")
-    # parser.add_argument("--type", choices=["STATIC", "SHARED"], default="STATIC", help="動的ライブラリか、静的ライブラリか")
-    parser.add_argument("--type", choices=["private", "public"], default="private", help="リポジトリの公開設定")
+    parser.add_argument("--type", choices=["STATIC", "SHARED"], default="STATIC", help="動的ライブラリか、静的ライブラリか")
+    parser.add_argument("--open", choices=["private", "public"], default="private", help="リポジトリの公開設定")
     #--------------
     # 引き数定義ゾーン終了
     #=====================================
@@ -40,68 +41,42 @@ def Register(subparsers):
 # コマンドを実行したときの処理
 def Execute(args):
 
-    createLib.CreateLib(args.name,args.type)
+    # ライブラリの名前
+    libName = args.name
+    # ライブラリの公開設定
+    openType = args.open
 
-    # # GitHubのリポジトリを作成
-    # subprocess.run(["gh","repo","create",f"{args.name}",f"--{args.type}"])
-    # # GitHubのユーザー名を取得
-    # result = subprocess.run(
-    #     ["gh", "api", "user", "--jq", ".login"],
-    #     stdout=subprocess.PIPE,
-    #     stderr=subprocess.PIPE,
-    #     text=True,
-    #     check=True
-    # )
-    # username = result.stdout.strip()
-    # # 作成したリポジトリをクローン
-    # subprocess.run(["git","clone",f"https://github.com/{username}/{args.name}.git"])
-    # # クローンしたディレクトリに移動
-    # os.chdir(f"{args.name}")
+    # 既に引数の名前のリポジトリが存在していたら中断
+    isCreatedResult = gitUtl.IsAlreadyCreatedRepo(libName)
+    if isCreatedResult == True:
+        log.Error("すでに同じ名前のリポジトリが存在します")
+        return False
+    else:
+        log.Error(f"{isCreatedResult}")
+        return False
 
 
-    # # モジュールテンプレートをダウンロード
-    # template_url = "https://github.com/FUKAMA/TempModule/archive/refs/heads/main.zip"
-    # template_zip = "TempMod.zip"
-    # print(f"Downloading template from {template_url}...")
-    # response = requests.get(template_url)
-    # with open(template_zip, "wb") as f:
-    #     f.write(response.content)
-    # print(f"Downloaded template to {template_zip}.")
+    
+    # 空のリポジトリを作成しクローン、そこに移動
+    log.SysMessage("リポジトリの作成開始")
+    libDirPath = os.getcwd() + "/" + args.name + "/"
+    os.mkdir(libDirPath)
+    gitUtl.CreateRepo(libName, openType)
+    os.chdir(libDirPath)
+    log.SysMessage("リポジトリの作成完了")
 
-    # # ダウンロードしたZIPを解凍
-    # with zipfile.ZipFile(template_zip, 'r') as zip_ref:
-    #     zip_ref.extractall("TempModule-main")
+    # 最低限必要なブランチを作成する
+    gitUtl.CreateBranch("develop")
+    gitUtl.CreateBranch("main")
 
-    # # 解凍したテンプレートの中身を移動
-    # temp_dir = "TempModule-main/TempModule-main"
-    # for item in os.listdir(temp_dir):
-    #     shutil.move(os.path.join(temp_dir, item), ".")
+    # ライブラリを作成
+    log.SysMessage("ライブラリの作成開始")
+    proj.CreateLib(libName,openType,args.type)
+    log.SysMessage("ライブラリの作成完了")
 
-    # # 展開に使ったディレクトリとZIPファイルを削除
-    # shutil.rmtree("TempModule-main")
-    # os.remove(template_zip)
+    # ライブラリを更新
+    proj.UpdateProject()
 
-    # # プロジェクト名などをJsonに保存
-    # #-------------------------------------
+    # ディレクトリの内容をGitにプッシュ
+    gitUtl.CommitAndPushDir(message="プロジェクトの初期化完了")
 
-    # # JSONファイルのパス
-    # proj_data_path = "projData.json"
-
-    # # 書き込むデータを作成
-    # projData = {
-    #     "ProjName": args.name,
-    #     "ProjType": args.type,
-    #     "libraries" : {}
-    # }
-
-    # # JSONファイルに書き込む
-    # with open(proj_data_path, "w", encoding="utf-8") as projDataFile:
-    #     json.dump(projData, projDataFile, indent=4, ensure_ascii=False)    # プロジェクトを初期化
-    # subprocess.run(["cmake",f"-DPROJ_NAME={args.name}",f"-DPROJ_TYPE={args.type}"])
-
-
-    # # 初期コミットとプッシュ
-    # subprocess.run(["git", "add", "."], check=True)
-    # subprocess.run(["git", "commit", "-m", "Initial commit"], check=True)
-    # subprocess.run(["git", "branch", "-M", "main"], check=True)
-    # subprocess.run(["git", "push", "-u", "origin", "main"], check=True)

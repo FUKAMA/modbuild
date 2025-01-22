@@ -4,7 +4,7 @@ import subprocess
 from tkinter import filedialog
 from tkinter import Tk, filedialog
 
-from modules.util import log
+from modules.utl import log
 
 
 # 説明や引き数などを登録する
