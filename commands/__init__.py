@@ -11,7 +11,7 @@ from tkinter import filedialog
 from tkinter import Tk, filedialog
 import json
 
-import loadPack
+import clitemp
 
 # このパッケージの説明
 
@@ -21,7 +21,7 @@ def LoadSubPackages(parser):
 
     packHelp = "パッケージの説明"
 
-    loadPack.Load(parser,__path__,__name__,packHelp)
+    clitemp.Load(parser,__path__,__name__,packHelp)
 
 
 

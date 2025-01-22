@@ -3,6 +3,8 @@ import sys
 import json
 import subprocess
 
+import clitemp
+
 # 説明や引き数などを登録する
 def Register(subparsers):
     #=====================================
@@ -16,8 +18,7 @@ def Register(subparsers):
 
     
     # コマンド名をファイル名から取得
-    commName =os.path.splitext(os.path.basename(os.path.abspath(__file__)))[0] 
-    parser = subparsers.add_parser(f"{commName}", help=f"cmm: {helpString}")
+    parser = clitemp.CreateCommandParser(__file__,subparsers, helpString)
     
     
     #=====================================

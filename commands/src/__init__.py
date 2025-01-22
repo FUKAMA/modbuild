@@ -10,11 +10,11 @@ from tkinter import filedialog
 from tkinter import Tk, filedialog
 
 # このパッケージの説明
-import loadPack
+import clitemp
 
 
 def LoadSubPackages(parser):
 
     packHelp = "パッケージの説明"
 
-    loadPack.Load(parser,__path__,__name__,packHelp)
+    clitemp.Load(parser,__path__,__name__,packHelp)

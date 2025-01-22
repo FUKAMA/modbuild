@@ -35,3 +35,11 @@ def Load(parser,dirPath,dirName,packHelp):
             subParser = packParser.add_subparsers()
             module.LoadSubPackages(subParser)
 
+
+def CreateCommandParser(filePath,subparsers,helpString):
+
+    commName =os.path.splitext(os.path.basename(os.path.abspath(filePath)))[0] 
+    parser = subparsers.add_parser(f"{commName}", help=f"cmm: {helpString}")
+
+    return parser
+

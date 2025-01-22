@@ -12,7 +12,7 @@ from tkinter import Tk, filedialog
 import json
 
 
-import loadPack
+import clitemp
 
 # このパッケージの説明
 
@@ -21,4 +21,4 @@ import loadPack
 def LoadSubPackages(parser):
 
     packHelp = "各種プロジェクトを作成するコマンドが格納されたパッケージ"
-    loadPack.Load(parser,__path__,__name__,packHelp)
+    clitemp.Load(parser,__path__,__name__,packHelp)

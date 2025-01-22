@@ -8,9 +8,12 @@ from tkinter import filedialog
 from tkinter import Tk, filedialog
 import json
 
+import clitemp
+
+helpString = "ソリューションを起動する"
 
 def Register(subparsers):
-    parser = subparsers.add_parser("open", help="モジュールの開発環境を開く")
+    parser = clitemp.CreateCommandParser(__file__,subparsers, helpString)
 
 def Execute(args):
 
