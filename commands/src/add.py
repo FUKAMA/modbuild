@@ -5,7 +5,10 @@ from tkinter import filedialog
 from tkinter import Tk, filedialog
 
 from modules.utl import log
+from modules import fileUtl
+from modules import proj
 import clitemp
+
 
 
 # 説明や引き数などを登録する
@@ -19,9 +22,8 @@ def Register(subparsers):
     # 引き数定義ゾーン終了
     #=====================================
 
-    
     # コマンド名をファイル名から取得
-    parser = clitemp.CreateCommandParser(__file__,subparsers, helpString)
+    parser = clitemp.CreateCommandParser(__file__, subparsers, helpString)
     
     #=====================================
     # 引き数定義ゾーン開始
@@ -43,35 +45,45 @@ def Execute(args):
     print(args.name)
     # プロジェクトのあるディレクトリを保存
     cDir = os.path.abspath(os.getcwd())
+
+    # srcディレクトリのパスを作成
+    srcDir = f"{cDir}/main/src"
+
     # ディレクトリを選択
-    fileDir = filedialog.askdirectory(initialdir = f"{cDir}/main/src")
+    fileDir = fileUtl.GetDirPathFromExplorer(srcDir)
+
     # ディレクトリを移動
     os.chdir(fileDir)
 
     # ファイルに書き込む文字列を作成
-    hFileString=f"#pragma once\n// {args.name}"
-    cppFileString=""
+    hFileString = f"#pragma once\n"
 
-    # if args.h:
-    #     # ファイルを作成
-    #     with open(f"{args.name}.h",mode="w") as file:
-    #         file.write(hFileString)
+    filePath = ""
+
+    # ファイルを作成
     if args.hpp:
-        # ファイルを作成
-        with open(f"{args.name}.hpp",mode="w") as file:
-            file.write(hFileString)
+        filePath = f"{args.name}.hpp"
+        fileUtl.CreateFile(path=filePath,value=hFileString)
+        if args.open:
+            # テストファイルの絶対パスを求める
+            fullFilePath = fileDir + "/" + filePath
+            os.system(f"start {fullFilePath}")
     if args.cpp:
-        # ファイルを作成
-        with open(f"{args.name}.cpp",mode="w") as file:
-            if args.hpp:
-            # if args.h or args.hpp:
-                cppFileString=f"#include \"{args.name}.hpp\""
-            file.write(cppFileString)
+        filePath = f"{args.name}.cpp"
+        hFileString = ""
+        if args.hpp:
+            hFileString=f"#include \"{args.name}.hpp\""
+        fileUtl.CreateFile(path=filePath,value=hFileString)
+        if args.open:
+            # テストファイルの絶対パスを求める
+            fullFilePath = fileDir + "/" + filePath
+            os.system(f"start {fullFilePath}")
+    
 
     # ディレクトリを戻す
     os.chdir(cDir)
 
     # プロジェクトを更新
-    files = os.listdir(os.getcwd()+"/main/include")
-    projName = [i for i in files if i.endswith(".hpp") == True]
-    subprocess.run(["cmake",f"-DPROJ_NAME={os.path.splitext(projName[0])[0]}","-DPROJ_TYPE=STATIC"])
+    proj.UpdateProject()
+
+
