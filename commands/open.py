@@ -9,6 +9,8 @@ from tkinter import Tk, filedialog
 import json
 
 import clitemp
+from modules import proj
+from modules.utl import log
 
 helpString = "ソリューションを起動する"
 
@@ -17,28 +19,14 @@ def Register(subparsers):
 
 def Execute(args):
 
-    # proj_data_path = "projData.json"
-    # json.load(proj_data_path)
+    if not proj.IsProject():
+        log.Error("プロジェクトディレクトリではありません")
+        return False
 
-    # open()   
-    with open("projData.json", "r", encoding="utf-8") as file:
+    with open("projData.json", "r", encoding = "utf-8") as file:
         data = json.load(file)  # JSONをPythonの辞書型に変換
-    projName=data.get("ProjName")
+    projName = data.get("ProjName")
 
     os.system(f"start {projName}.sln")
 
-
-    # # ソリューションのパスを指定
-    # solution_path = filedialog.askopenfilename(
-    #     title="プロジェクトファイルを選択",
-    #     filetypes=[("ソリューションファイル", "*.sln")]
-    # )
-    # print(solution_path)
-    # dir_name=os.path.dirname(solution_path)
-    # print(dir_name)
-
-    # os.startfile(solution_path)
-
-    # os.system(["cd","C:\Project\ECO Engine\ECO Engine"])
-
-    # subprocess.run(["cd","C:\Project\ECO Engine\ECO Engine"],shell=True)
+    return True

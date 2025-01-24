@@ -1,4 +1,5 @@
 import os
+import subprocess
 from tkinter import Tk, filedialog
 import sys
 from pathlib import Path
@@ -49,6 +50,8 @@ def OpenFile(fullPath):
     fullPathObj = Path(fullPath)
     if not fullPathObj.is_file():
         log.Error("存在しないパスは開けません")
-        return
+        return False
     # テストファイルの絶対パスを求める
-    os.system(f"start {fullPath}")
+    subprocess.run(["start",f"{fullPath}"])
+
+    return True

@@ -42,6 +42,17 @@ def Register(subparsers):
 # コマンドを実行したときの処理
 def Execute(args):
 
+    if not proj.IsProject():
+        log.Error("プロジェクトディレクトリではありません")
+        return False
+
+    if not args.name:
+        log.Error("ファイル名を指定してください")
+        return False
+    if not (args.hpp or args.cpp):
+        log.Error("ファイルの種類を指定してください")
+        return False
+
     # ディレクトリが指定されてなければエクスプローラーを開いて指定
     print(args.name)
     # プロジェクトのあるディレクトリを保存

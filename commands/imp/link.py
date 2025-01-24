@@ -4,6 +4,8 @@ import json
 import subprocess
 
 import clitemp
+from modules.utl import log
+from modules import proj
 
 # 説明や引き数などを登録する
 def Register(subparsers):
@@ -41,18 +43,32 @@ def Register(subparsers):
 # コマンドを実行したときの処理
 def Execute(args):
 
+    if not proj.IsProject():
+        log.Error("プロジェクトディレクトリではありません")
+        return False
+    
+    isArgs = True
+    if not args.name:
+        log.Error("モジュールの名前を指定してください")
+        isArgs = False    
+    if not args.path:
+        log.Error("Gitパスを指定してください")
+        isArgs = False
+    if not isArgs:
+        return False
+
     exePath = os.getcwd()
     os.chdir(exePath)
 
     proj_data_path = "projData.json"
 
-    fullProjPath = exePath+"/"+proj_data_path
+    fullProjPath = exePath + "/" + proj_data_path
 
     # projData.jsonを読み込む
     pjFile = open(fullProjPath, "r")
     if not pjFile:
-        print("ファイルが存在しません")
-        sys.exit(1)
+        log.Error("ファイルが存在しません")
+        return False
     pjData = json.load(pjFile)
 
 
@@ -61,14 +77,11 @@ def Execute(args):
     isLinked = False
     # 既にリンクしてるか確認する
     isLinked = any(item["path"] == args.path for item in modItems)
-    # for item in pjData["modules"]:
-    #     if item["path"] == args.path:
-    #         isLinked = True
 
     # 既にリンクしてたら終了
     if isLinked == True:
-        print("既にリンク済みのモジュールです")
-        sys.exit(1)
+        log.Error("既にリンク済みのモジュールです")
+        return False
 
     # リンクをリストに追加
     modItems.append({"path": f"{args.path}","name": f"{args.name}"})

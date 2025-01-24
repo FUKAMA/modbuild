@@ -13,11 +13,11 @@ from modules.utl import log
 
 
 # 引数のパスのディレクトリがプロジェクトとして機能するか調べる
-def IsProject(fullDirPath):
+def IsProject():
 
     # projDataファイルのフルパスを作成
     projDataName = "projData.json"
-    projDataPath = fullDirPath + "/" + projDataName
+    projDataPath = os.getcwd() + "/" + projDataName
 
     # projDataファイルが存在すればtrueを返す
     if os.path.isfile(projDataPath):
@@ -76,7 +76,7 @@ def CreateLib(name,libType,openType):
 def UpdateProject():
 
     # 今いるディレクトリがプロジェクトとして機能してなければ中断
-    if not IsProject(os.getcwd()):
+    if not IsProject():
         log.Error("プロジェクトディレクトリではありません")
         return False
 
@@ -87,6 +87,11 @@ def UpdateProject():
 
 # 今いるディレクトリのプロジェクトをビルドする
 def BuildProject():
+    # 今いるディレクトリがプロジェクトとして機能してなければ中断
+    if not IsProject():
+        log.Error("プロジェクトディレクトリではありません")
+        return False
+
     cPath = os.getcwd() + "/CMakeLists.txt"
     cPathObj = Path(cPath)
     # 今いるディレクトリがプロジェクト出なければ中断
