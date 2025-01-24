@@ -5,6 +5,8 @@ import requests
 import zipfile
 import json
 
+from pathlib import Path
+
 from modules.utl import log
 
 
@@ -83,3 +85,13 @@ def UpdateProject():
     projName = [i for i in files if i.endswith(".hpp") == True]
     subprocess.run(["cmake",f"-DPROJ_NAME={os.path.splitext(projName[0])[0]}","-DPROJ_TYPE=STATIC"])
 
+# 今いるディレクトリのプロジェクトをビルドする
+def BuildProject():
+    cPath = os.getcwd() + "/CMakeLists.txt"
+    cPathObj = Path(cPath)
+    # 今いるディレクトリがプロジェクト出なければ中断
+    if not cPathObj.is_file():
+        log.Error("有効なプロジェクトディレクトリではありません")
+        return False
+    subprocess.run(["cmake","--build","."])
+    return True

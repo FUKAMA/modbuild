@@ -2,6 +2,9 @@ import subprocess
 import os
 
 import clitemp
+from modules import proj
+from modules import testUtil
+
 
 # 説明や引き数などを登録する
 def Register(subparsers):
@@ -34,12 +37,13 @@ def Register(subparsers):
 def Execute(args):
 
     # モジュールをビルド
-    print("モジュールのビルド")
-    subprocess.run(["cmake","--build","."])
+    if not proj.BuildProject():
+        return
+
 
     # ビルド結果が格納されているディレクトリに移動
     os.chdir("build/bin/Debug")
 
     # テストを実行
-    os.system(f"test.exe --gtest_filter={args.case}.{args.name}")
+    testUtil.RunTest(args.case,args.name)
 

@@ -118,4 +118,5 @@ TEST({sourceName}, {args.name})
     if args.open:
         # テストファイルの絶対パスを求める
         fullTestFilePath = testDir + "/" + testFilePath
-        os.system(f"start {fullTestFilePath}")
+        # 作成したファイルを開く
+        fileUtl.OpenFile(fullTestFilePath)

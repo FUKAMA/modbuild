@@ -2,6 +2,7 @@ import os
 import sys
 
 import clitemp
+from modules import proj
 
 # 説明や引き数などを登録する
 def Register(subparsers):
@@ -24,15 +25,11 @@ def Register(subparsers):
     #--------------
     # parser.add_argument("--変数名", help="変数の説明")
     #--------------
-    parser.add_argument("--hoge",default="aaa", help="HOGEるかどうか")
+
     #--------------
     # 引き数定義ゾーン終了
     #=====================================
 
 # コマンドを実行したときの処理
 def Execute(args):
-    if not args.hoge:
-        print("hogeが指定されてません")
-        sys.exit(1)
-
-    print(f"コマンドを実行: {args.hoge}")
+    proj.BuildProject()

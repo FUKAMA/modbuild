@@ -34,6 +34,7 @@ def Register(subparsers):
     parser.add_argument("--dir",default="",help="ソースを配置するディレクトリ")
     parser.add_argument("-hpp", action="store_true", help="ヘッダファイルを生成")
     parser.add_argument("-cpp", action="store_true", help="ヘッダファイルを生成")
+    parser.add_argument("-open", action = "store_true", help = "ファイル追加後に開くか")
     #--------------
     # 引き数定義ゾーン終了
     #=====================================
@@ -60,24 +61,22 @@ def Execute(args):
 
     filePath = ""
 
+    fullFilePath = ""
+
     # ファイルを作成
     if args.hpp:
         filePath = f"{args.name}.hpp"
-        fileUtl.CreateFile(path=filePath,value=hFileString)
-        if args.open:
-            # テストファイルの絶対パスを求める
-            fullFilePath = fileDir + "/" + filePath
-            os.system(f"start {fullFilePath}")
+        fileUtl.CreateFile(path = filePath,value=hFileString)
+        # テストファイルの絶対パスを求める
+        fullFilePath = fileDir + "/" + filePath
     if args.cpp:
         filePath = f"{args.name}.cpp"
         hFileString = ""
         if args.hpp:
             hFileString=f"#include \"{args.name}.hpp\""
         fileUtl.CreateFile(path=filePath,value=hFileString)
-        if args.open:
-            # テストファイルの絶対パスを求める
-            fullFilePath = fileDir + "/" + filePath
-            os.system(f"start {fullFilePath}")
+        # テストファイルの絶対パスを求める
+        fullFilePath = fileDir + "/" + filePath
     
 
     # ディレクトリを戻す
@@ -86,4 +85,7 @@ def Execute(args):
     # プロジェクトを更新
     proj.UpdateProject()
 
+
+    if args.open:
+        fileUtl.OpenFile(fullFilePath)
 
