@@ -30,3 +30,4 @@ def Execute(args):
     os.system(f"start {projName}.sln")
 
     return True
+

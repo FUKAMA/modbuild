@@ -45,7 +45,6 @@ def Execute(args):
     if not proj.IsProject():
         log.Error("プロジェクトディレクトリではありません")
         return False
-
     if not args.name:
         log.Error("ファイル名を指定してください")
         return False
@@ -98,5 +97,13 @@ def Execute(args):
 
 
     if args.open:
-        fileUtl.OpenFile(fullFilePath)
+        if args.hpp:
+            filePath = f"{args.name}.hpp"
+            fullFilePath = fileDir + "/" + filePath
+            fileUtl.OpenFile(fullFilePath)
+        if args.cpp:
+            filePath = f"{args.name}.cpp"
+            fullFilePath = fileDir + "/" + filePath
+            fileUtl.OpenFile(fullFilePath)
+
 

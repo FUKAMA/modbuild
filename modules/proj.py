@@ -11,7 +11,6 @@ from modules.utl import log
 
 
 
-
 # 引数のパスのディレクトリがプロジェクトとして機能するか調べる
 def IsProject():
 
@@ -100,3 +99,21 @@ def BuildProject():
         return False
     subprocess.run(["cmake","--build","."])
     return True
+
+# 
+def GetSlnPath():
+
+    with open("projData.json", "r", encoding = "utf-8") as file:
+        data = json.load(file)  # JSONをPythonの辞書型に変換
+    projName = data.get("ProjName")
+
+    slnFullPath = os.getcwd() + "/" + projName + ".sln"
+
+    # ソリューションファイルが存在してなければ中止
+    slnFullPathObj = Path(slnFullPath)
+    if not slnFullPathObj.is_file():
+        log.Error("ソリューションファイルが存在しません")
+        return False
+
+    return slnFullPath
+

@@ -100,6 +100,7 @@ def Execute(args):
     # テストファイルに書き込む文字列を作成
     testSource = f"""#include <gtest/gtest.h>
 #include \"{includeMainPath}\"
+
 TEST({sourceName}, {args.name})
 {{
     EXPECT_TRUE(true);    // 成功
