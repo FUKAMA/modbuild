@@ -11,6 +11,7 @@ from tkinter import Tk, filedialog
 
 # このパッケージの説明
 import clitemp
+from modules import fileUtl
 
 
 def LoadSubPackages(parser):
