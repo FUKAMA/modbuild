@@ -59,6 +59,10 @@ def CreateFile(path,value,enco="utf-8-sig"):
 
 #     return True
 
+# 引数のパスのファイルが存在するか確認する
+def IsExistFilePath(path):
+    return os.path.isfile(path)
+
 
 # ファイルをソリューションで起動する
 # ToDo:VS2022専用の実装でなくする
