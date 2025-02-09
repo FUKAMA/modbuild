@@ -39,11 +39,8 @@ def GetDirPathFromExplorer(currentDir = None):
 
 
 def CreateFile(path,value,enco="utf-8-sig"):
-    # ファイルに書き込む文字列を作成
-    hFileString = f"#pragma once\n"
-    cppFileString = ""
-        # ファイルを作成
-    with open(path,mode="w",encoding=enco) as file:
+    # ファイルを作成
+    with open(path, mode="w",encoding=enco) as file:
         file.write(value)
 
 # # ファイルをソリューションで起動する
